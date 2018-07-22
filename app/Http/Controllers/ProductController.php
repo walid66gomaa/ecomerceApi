@@ -6,6 +6,7 @@ use App\Model\Product;
 use Illuminate\Http\Request;
 use App\Http\Resources\Product\ProductResource;
 use App\Http\Resources\Product\ProductCollection;
+use App\Http\Requests\ProductRequest;
 
 class ProductController extends Controller
 {
@@ -14,6 +15,12 @@ class ProductController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+
+     Public function __construct()
+     {
+         $this->middleware('auth:api')->except('show','index');
+     }
+
     public function index()
     {
         // echo "<pre>";
@@ -37,9 +44,16 @@ class ProductController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(ProductRequest $request)
     {
-        //
+        $product= new Product();
+        $product->name=$request->name;
+        $product->detail=$request->descreption;
+        $product->stock=$request->stock;
+        $product->price=$request->price;
+        $product->discount=$request->discount;
+        $product->save();
+        return  new ProductResource($product);
     }
 
     /**
@@ -74,7 +88,10 @@ class ProductController extends Controller
      */
     public function update(Request $request, Product $product)
     {
-        //
+        $request['detail']=$request->descreption;
+        unset($request['descreption']);
+        $product->update($request->all());
+        return $product;
     }
 
     /**
