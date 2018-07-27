@@ -20,6 +20,8 @@ class CreateProductsTable extends Migration
             $table->integer('price')->nullable;
             $table->integer('stock')->nullable;
             $table->integer('discount')->nullable;
+            $table->integer('user_id')->unsigned()->index();
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->timestamps();
         });
     }

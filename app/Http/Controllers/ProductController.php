@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers;
 
+
 use App\Model\Product;
 use Illuminate\Http\Request;
 use App\Http\Resources\Product\ProductResource;
 use App\Http\Resources\Product\ProductCollection;
 use App\Http\Requests\ProductRequest;
+use Illuminate\Support\Facades\Auth;
 
 class ProductController extends Controller
 {
@@ -52,6 +54,7 @@ class ProductController extends Controller
         $product->stock=$request->stock;
         $product->price=$request->price;
         $product->discount=$request->discount;
+        $product->user_id=Auth::id();
         $product->save();
         return  new ProductResource($product);
     }
@@ -87,11 +90,24 @@ class ProductController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, Product $product)
-    {
-        $request['detail']=$request->descreption;
+    { 
+
+        if(Auth::id()==$product->user_id)
+        {
+           $request['detail']=$request->descreption;
         unset($request['descreption']);
         $product->update($request->all());
-        return $product;
+        return $product; 
+        }
+        else
+        {
+            return response()->json (
+               [ 
+                   'error'=>"product Not Belongs To User"
+               
+               ]);
+        }
+        
     }
 
     /**
@@ -101,7 +117,8 @@ class ProductController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function destroy(Product $product)
-    {
-        //
+    { 
+        $product->delete();
+      return response($product,204);
     }
 }
