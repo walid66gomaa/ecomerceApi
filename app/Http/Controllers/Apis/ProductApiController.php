@@ -1,7 +1,8 @@
 <?php
 
 namespace App\Http\Controllers;
-
+namespace App\Http\Controllers\Apis;
+use App\Http\Controllers\Controller;
 
 
 use App\Model\Product;
@@ -11,7 +12,7 @@ use App\Http\Resources\Product\ProductCollection;
 use App\Http\Requests\ProductRequest;
 use Illuminate\Support\Facades\Auth;
 
-class ProductController extends Controller
+class ProductApiController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -27,9 +28,7 @@ class ProductController extends Controller
     public function index()
     {
        
-        $products = ProductCollection::collection(Product::paginate(24));
-
-        return  view('product.allproduct',compact('products'));
+        return ProductCollection::collection(Product::all());
   
   
     }
@@ -72,7 +71,7 @@ class ProductController extends Controller
     public function show(Product $product)
     {
         //
-        return  view('product.oneproduct' ,compact('product'));
+        return new ProductResource($product);
     }
 
     /**

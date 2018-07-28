@@ -18,3 +18,12 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
+
+Route::resource('/products','ProductController');
+Route::group(['prefix'=>'products'],function(){
+
+    Route::Resource('/{product}/reviews','ReviewController');
+});
+Route::get('/del',function(){
+    return view('del');
+});

@@ -1,7 +1,8 @@
 <?php
 
 namespace App\Http\Controllers;
-
+namespace App\Http\Controllers\Apis;
+use App\Http\Controllers\Controller;
 
 use App\Model\Review;
 use App\Model\Product;
@@ -9,7 +10,7 @@ use Illuminate\Http\Request;
 use  App\Http\Resources\ReviewResource;
 use App\Http\Requests\ReviewRequest;
 
-class ReviewController extends Controller
+class ReviewApiController extends Controller
 {
     /**
      * Display a listing of the resource.
